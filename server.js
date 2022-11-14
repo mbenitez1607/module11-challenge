@@ -33,9 +33,8 @@ app.post('/api/notes', (req, res) => {
     const newNote = {
         title,
         text,
-        note_id: uuidv4()
+        id: uuidv4()
     };
-    //console.log(newNote);
     writeNote(newNote);
     const response = {
         status: 'Success',
@@ -57,6 +56,37 @@ function writeNote (newNote){
         }
     });
 }
+
+/*app.get('/api/notes/:id',(req, res) => {
+    console.info(`${req.method} request to get note with id=${JSON.stringify(req.params)}`);
+    //console.log(JSON.stringify(req.params));
+});
+*/
+app.delete('/api/notes/:id',(req, res) => {
+    console.info(`${req.method} request to delete a note`);
+    //console.log(JSON.stringify(req.params));
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        if (err) {
+            console.log(err);
+        } else {
+            const parsedData = JSON.parse(data);
+            // Look for the element in parsedData with the requested 'id'
+            for (let [i, note] of parsedData.entries()) {
+                if (note.id === req.params.id){
+                    // Delete current element from parsedData
+                    parsedData.splice(i,1);
+                }
+            }
+            fs.writeFile('./db/db.json', JSON.stringify(parsedData, null, 4), (err) =>
+            err ? console.error(err) : console.info(`\nData written to db.json`)
+          );
+        }
+    });
+    const response = {
+        status: 'Success',
+    };
+    res.status(201).json(response);
+});
 
 // Start server on port 3001
 app.listen(PORT, () => 
