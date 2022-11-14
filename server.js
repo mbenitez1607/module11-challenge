@@ -78,7 +78,7 @@ app.delete('/api/notes/:id',(req, res) => {
                 }
             }
             fs.writeFile('./db/db.json', JSON.stringify(parsedData, null, 4), (err) =>
-            err ? console.error(err) : console.info(`\nData written to db.json`)
+            err ? console.error(err) : console.info(`\nData deleted from db.json`)
           );
         }
     });
