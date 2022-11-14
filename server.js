@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const noteData = require('./db/db.json');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
@@ -13,10 +12,14 @@ app.use(express.json());
 
 // Serve static files in /public dir
 app.use(express.static('public'));
+
 // Serve landing page (index.html)
 app.get('/', (req,res) => res.sendFile(path.join(__dirname, 'index.html')));
 
+// Serve notes page (notes.html)
 app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, '/public/notes.html')));
+
+// Read db.json and return all saved notes
 app.get('/api/notes', (req, res) => {
     fs.readFile('./db/db.json', (err,data) => {
         if (err) {
@@ -27,6 +30,7 @@ app.get('/api/notes', (req, res) => {
     });
 });
 
+// Receive a new note to add to db.json
 app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request to create a note`);
     const {title, text} = req.body;
@@ -35,15 +39,6 @@ app.post('/api/notes', (req, res) => {
         text,
         id: uuidv4()
     };
-    writeNote(newNote);
-    const response = {
-        status: 'Success',
-        body: newNote,
-    };
-    res.status(201).json(response);
-});
-
-function writeNote (newNote){
     fs.readFile('./db/db.json', 'utf8', (err, data) => {
         if (err) {
             console.log(err);
@@ -55,13 +50,14 @@ function writeNote (newNote){
           );
         }
     });
-}
-
-/*app.get('/api/notes/:id',(req, res) => {
-    console.info(`${req.method} request to get note with id=${JSON.stringify(req.params)}`);
-    //console.log(JSON.stringify(req.params));
+    const response = {
+        status: 'Success',
+        body: newNote,
+    };
+    res.status(201).json(response);
 });
-*/
+
+// Receive the 'id' of a note to delete
 app.delete('/api/notes/:id',(req, res) => {
     console.info(`${req.method} request to delete a note`);
     //console.log(JSON.stringify(req.params));
