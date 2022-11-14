@@ -4,7 +4,7 @@ const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
 const app = express();
-const PORT = 3001;
+const port = process.env.PORT || 3001;
 
 // Set up Express app to handle data parsing 
 app.use(express.urlencoded({extended: true}));
@@ -85,6 +85,6 @@ app.delete('/api/notes/:id',(req, res) => {
 });
 
 // Start server on port 3001
-app.listen(PORT, () => 
-    console.log(`Note Taker is listening on port ${PORT}`)
+app.listen(port, () => 
+    console.log(`Note Taker is listening on port ${port}`)
 );
