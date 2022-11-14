@@ -17,7 +17,7 @@ The Note Taker application can be used to write and save notes. This application
 
 ## Installation
 
-The application is deployed at [Note Taker](https://mbenitez1607.github.io/module11-challenge/)
+The application is deployed at [Note Taker](https://module11-challenge.herokuapp.com/)
 
 To run your own version of the app do the following:
 1. Install Node.js v16 and Express 4.16.4
